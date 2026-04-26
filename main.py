@@ -4,6 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 data = sns.load_dataset('iris')
+ftrs_names = ['SepalLengthCm','SepalWidthCm','PetalLengthCm','PetalWidthCm']
 iris_list = data.values.tolist()
 
 
@@ -32,5 +33,5 @@ model = logisticRegressionModel(0.1, 200, 1000)
 model.fit(features_train, labels_train)
 
 fig, ax = plt.subplots(2, 2)
-model.paint(features_test, labels_test, ax[0], fig)
+model.paint(features_test, labels_test, ax[0], fig, (0,1), ftrs_names)
 plt.show()

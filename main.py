@@ -34,5 +34,6 @@ model = LogisticRegressionModel(0.1, 200, 500)
 model.fit(features_train, labels_train)
 
 fig, ax = plt.subplots(2, 2)
-tools.paint(model, features_test, labels_test, ax[0], fig, (2,3), ftrs_names)
+tools.paint(model, features_test, labels_test, ax[0], fig, (0,1), ftrs_names)
+tools.paint(model, features_test, labels_test, ax[1], fig, (2,3), ftrs_names)
 plt.show()

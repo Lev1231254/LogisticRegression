@@ -1,14 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+CLIP_VALUE = 500
+
 class LogisticRegressionModel:
     def __init__(self, lr, batch_size, epochs):
         self.lr = lr
         self.batch_size = batch_size
         self.epochs = epochs
 
-        self.mean = []
-        self.std = []
+        self.mean = 0
+        self.std = 1
 
         self.weights = []
         self.bias = 0
@@ -18,6 +21,7 @@ class LogisticRegressionModel:
     
 
     def fit(self, features_train, labels_train):
+
         # set normalization parameters
         self.mean = features_train.mean(axis=0)
         self.std = features_train.std(axis=0)
@@ -32,12 +36,12 @@ class LogisticRegressionModel:
         n = len(features_train)
         for _ in range(self.epochs):
             indices = np.random.permutation(n)
-            features_train = features_train[indices]
-            labels_train = labels_train[indices]
+            features_train_copy = features_train[indices]
+            labels_train_copy = labels_train[indices]
 
             for i in range(0, n, self.batch_size):
-                features_batch = features_train[i : i + self.batch_size]
-                labels_batch = labels_train[i : i + self.batch_size]
+                features_batch = features_train_copy[i : i + self.batch_size]
+                labels_batch = labels_train_copy[i : i + self.batch_size]
 
                 self.update_weights(features_batch, labels_batch)
 
@@ -57,7 +61,7 @@ class LogisticRegressionModel:
     def calculate_probs(self, features_batch : np.array):
         features_num = features_batch.shape[1]
         log_odds = np.dot(features_batch, self.weights[:features_num]) + self.bias
-        log_odds = np.clip(log_odds, -500, 500)  # prevents overflow
+        log_odds = np.clip(log_odds, -1 * CLIP_VALUE, CLIP_VALUE)  # prevents overflow
         return 1 / (1 + np.exp(-log_odds))
 
 

@@ -62,50 +62,56 @@ class logisticRegressionModel:
 
 
     def paint(self, ftrs_test_raw, labels_test, ax, fig, heatmapIndices, ftrs_names):
-        # set labels for heatmap befor normalizing ftrs
-        i, j = heatmapIndices[0], heatmapIndices[1]
-        x1min, x1max = min(ftrs_test_raw[:, i]), max(ftrs_test_raw[:, i])
-        x2min, x2max = min(ftrs_test_raw[:, j]), max(ftrs_test_raw[:, j])
-        extent = (x1min, x1max, x2min, x2max)
-
         ftrs_test_norm = self.normalize(ftrs_test_raw)
 
-        # plot decision boundary
-        x1 = ftrs_test_raw[:, i]
-        x2 = ftrs_test_raw[:, j]
+        # set features that we use
+        i, j = heatmapIndices[0], heatmapIndices[1]
 
-        ax[0].scatter(x1, x2, 
+        x1raw = ftrs_test_raw[:, i]
+        x2raw = ftrs_test_raw[:, j]
+
+        x1norm = ftrs_test_norm[:, i]
+        x2norm = ftrs_test_norm[:, j]
+
+        extentRaw = (x1raw.min(), x1raw.max(), x2raw.min(), x2raw.max())
+        extentNorm = (x1norm.min(), x1norm.max(), x2norm.min(), x2norm.max())        
+
+        # ------plot decision boundary------
+        
+        ax[0].scatter(x1norm, x2norm, 
                       c=labels_test,
                       cmap='coolwarm')
-        ax[0].set_xlabel(ftrs_names[i])
-        ax[0].set_ylabel(ftrs_names[j])
+        ax[0].set_xlabel('Normalized ' + str(ftrs_names[i]))
+        ax[0].set_ylabel('Normalized ' + str(ftrs_names[j]))
 
         ax[0].set_title('Decision boundary')
 
-        x_vals = np.linspace(x1.min(), x1.max(), 100)
+        x_vals = np.linspace(x1norm.min(), x1norm.max(), 100)
         y_vals = -(self.weights[i] * x_vals + self.bias) / self.weights[j]
 
         ax[0].plot(x_vals, y_vals, color='black')
         
-        # plot heatmap probabilities
-        
-        # set min and max after normalization
-        x1min, x1max = min(ftrs_test_norm[:, i]), max(ftrs_test_norm[:, i])
-        x2min, x2max = min(ftrs_test_norm[:, j]), max(ftrs_test_norm[:, j])
-        probs = self.getHeatmapProbs(len(ftrs_test_norm[0]), heatmapIndices, x1min, x1max, x2min, x2max)
+        # ------plot heatmap probabilities------
+        probs = self.getHeatmapProbs(len(ftrs_test_norm[0]), heatmapIndices, extentNorm)
 
         ax[1].imshow(probs, 
                      cmap='viridis',
-                     extent=extent,
+                     extent=extentRaw,
                      origin='lower')
-        ax[1].set_title('Probabilities')
         
-    def getHeatmapProbs(self, num_of_ftrs, ftrs_id, x1min, x1max, x2min, x2max):
+        ax[1].set_title('Probabilities')
+        ax[1].set_xlabel(ftrs_names[i])
+        ax[1].set_ylabel(ftrs_names[j])
+        
+    
+    def getHeatmapProbs(self, num_of_ftrs, ftrs_id, extent):
         # make matrix of values
+        x1min, x1max  = extent[0], extent[1]
+        x2min, x2max = extent[2], extent[3]
 
         grid = []
-        i = 0
-        j = 0
+        i, j = 0, 0
+
         for x in [x/10 for x in range(int(x1min * 10), int(x1max * 10), 1)]:
             grid.append([])
             j = 0

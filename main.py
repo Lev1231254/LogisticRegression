@@ -1,4 +1,4 @@
-from LogisticRegressionModel import logisticRegressionModel
+from LogisticRegressionModel import LogisticRegressionModel
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -29,9 +29,9 @@ labels_test = np.concatenate([labels_test_setosa, labels_test_versicolor])
 
 
 
-model = logisticRegressionModel(0.1, 200, 1000)
+model = LogisticRegressionModel(0.1, 200, 500)
 model.fit(features_train, labels_train)
 
 fig, ax = plt.subplots(2, 2)
-model.paint(features_test, labels_test, ax[0], fig, (0,1), ftrs_names)
+model.paint(features_test, labels_test, ax[0], fig, (2,3), ftrs_names)
 plt.show()

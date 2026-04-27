@@ -1,4 +1,5 @@
-from LogisticRegressionModel import LogisticRegressionModel
+from logisticRegressionFromScratch import LogisticRegressionModel
+import tools
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -33,5 +34,5 @@ model = LogisticRegressionModel(0.1, 200, 500)
 model.fit(features_train, labels_train)
 
 fig, ax = plt.subplots(2, 2)
-model.paint(features_test, labels_test, ax[0], fig, (2,3), ftrs_names)
+tools.paint(model, features_test, labels_test, ax[0], fig, (2,3), ftrs_names)
 plt.show()

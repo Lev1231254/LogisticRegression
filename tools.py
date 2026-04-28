@@ -37,7 +37,7 @@ def getHeatmapProbabilities(model, num_of_features, features_id, extent):
         return prob_grid
 
 
-def paint(model, features_test_raw, labels_test, ax, fig, heatmapIndices, features_names):
+def paint(model, features_test_raw, labels_test, ax, fig, heatmapIndices, features_names, titles_on):
         features_test_norm = model.normalize(features_test_raw)
 
         # set features that we use
@@ -60,7 +60,7 @@ def paint(model, features_test_raw, labels_test, ax, fig, heatmapIndices, featur
         ax[0].set_xlabel('Normalized ' + str(features_names[i]))
         ax[0].set_ylabel('Normalized ' + str(features_names[j]))
 
-        ax[0].set_title('Decision boundary')
+        if titles_on: ax[0].set_title('Decision boundary')
 
         x_vals = np.linspace(x1norm.min(), x1norm.max(), 100)
         y_vals = -(model.weights[i] * x_vals + model.bias) / model.weights[j]
@@ -75,6 +75,6 @@ def paint(model, features_test_raw, labels_test, ax, fig, heatmapIndices, featur
                      extent=extentRaw,
                      origin='lower')
         
-        ax[1].set_title('Probabilities')
+        if titles_on: ax[1].set_title('Probabilities')
         ax[1].set_xlabel(features_names[i])
         ax[1].set_ylabel(features_names[j])

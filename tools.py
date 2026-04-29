@@ -79,6 +79,14 @@ def paint(model, features_test_raw, labels_test, ax, fig, heatmapIndices, featur
         ax[1].set_xlabel(features_names[i])
         ax[1].set_ylabel(features_names[j])
 
-        #-------plot weights history-------
 
+        #-------plot weights history-------
+        weights_history = np.array(model.weights_history)
+
+        for i in range(len(features_names)):
+            ax[2].plot(weights_history[:, i],
+                       label=features_names[i])
+            ax[2].legend()
+
+        if titles_on: ax[2].set_title('Weights history')
         

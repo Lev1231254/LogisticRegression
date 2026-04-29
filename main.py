@@ -30,11 +30,14 @@ labels_test = np.concatenate([labels_test_setosa, labels_test_versicolor])
 
 
 
-model = LogisticRegressionModel(0.1, 200, 500, 0.1)
+modelRidge = LogisticRegressionModel(0.1, 200, 500, 0.1)
+modelRidge.fit(features_train, labels_train)
+model = LogisticRegressionModel(0.1, 200, 500, 0)
 model.fit(features_train, labels_train)
 
-fig, ax = plt.subplots(2, 2)
-tools.paint(model, features_test, labels_test, ax[0], fig, (0,2), ftrs_names, True)
-tools.paint(model, features_test, labels_test, ax[1], fig, (1,3), ftrs_names, False)
+
+fig, ax = plt.subplots(2, 3)
+tools.paint(model, features_test, labels_test, ax[0], fig, (0,1), ftrs_names, True)
+tools.paint(modelRidge, features_test, labels_test, ax[1], fig, (0,1), ftrs_names, False)
 
 plt.show()

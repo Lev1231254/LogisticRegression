@@ -14,7 +14,7 @@ class LogisticRegressionModel:
         self.std = 1
 
         self.weights = np.array([])
-        self.weights_history = np.array([])
+        self.weights_history = []
         self.bias = 0
 
         self.ridge_rate = ridge_rate
@@ -38,7 +38,7 @@ class LogisticRegressionModel:
         # train model using gradient descent
         n = len(features_train)
         for _ in range(self.epochs):
-            
+
             indices = np.random.permutation(n)
             features_train_copy = features_train[indices]
             labels_train_copy = labels_train[indices]
@@ -49,7 +49,7 @@ class LogisticRegressionModel:
 
                 self.update_weights(features_batch, labels_batch)
             
-            self.weights_history.append(self.weights)
+            self.weights_history.append(self.weights.copy())
 
 
     def update_weights(self, features_batch, labels_batch):

@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 CLIP_VALUE = 500
 
 class LogisticRegressionModel:
-    def __init__(self, lr, batch_size, epochs):
+    def __init__(self, lr, batch_size, epochs, ridge_rate):
         self.lr = lr
         self.batch_size = batch_size
         self.epochs = epochs
@@ -13,8 +13,11 @@ class LogisticRegressionModel:
         self.mean = 0
         self.std = 1
 
-        self.weights = []
+        self.weights = np.array([])
+        self.weights_history = np.array([])
         self.bias = 0
+
+        self.ridge_rate = ridge_rate
     
     def normalize(self, features):
         return (features - self.mean) / self.std
@@ -35,6 +38,7 @@ class LogisticRegressionModel:
         # train model using gradient descent
         n = len(features_train)
         for _ in range(self.epochs):
+            
             indices = np.random.permutation(n)
             features_train_copy = features_train[indices]
             labels_train_copy = labels_train[indices]
@@ -44,6 +48,8 @@ class LogisticRegressionModel:
                 labels_batch = labels_train_copy[i : i + self.batch_size]
 
                 self.update_weights(features_batch, labels_batch)
+            
+            self.weights_history.append(self.weights)
 
 
     def update_weights(self, features_batch, labels_batch):
@@ -51,7 +57,7 @@ class LogisticRegressionModel:
 
         probs = self.calculate_probs(features_batch)
 
-        dw = np.dot(features_batch.T, probs - labels_batch) / n
+        dw = np.dot(features_batch.T, probs - labels_batch) / n + 2 * self.ridge_rate * self.weights
         db = np.sum(probs - labels_batch) / n
         
         self.weights -= self.lr * dw
@@ -63,8 +69,5 @@ class LogisticRegressionModel:
         log_odds = np.dot(features_batch, self.weights[:features_num]) + self.bias
         log_odds = np.clip(log_odds, -1 * CLIP_VALUE, CLIP_VALUE)  # prevents overflow
         return 1 / (1 + np.exp(-log_odds))
-
-
-    
         
     

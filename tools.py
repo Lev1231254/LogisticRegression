@@ -78,3 +78,7 @@ def paint(model, features_test_raw, labels_test, ax, fig, heatmapIndices, featur
         if titles_on: ax[1].set_title('Probabilities')
         ax[1].set_xlabel(features_names[i])
         ax[1].set_ylabel(features_names[j])
+
+        #-------plot weights history-------
+
+        

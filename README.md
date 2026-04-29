@@ -43,3 +43,16 @@ Interestingly the slope of the decision boundarydoes not align with the gradient
 All features show strong correlation with each other.
 
 This likely affects how the model distributes weights.
+
+---
+
+### Regularization
+
+<img width="1536" height="850" alt="normal logistic vs L2 logistic" src="https://github.com/user-attachments/assets/755210b2-c5f0-4f64-a3cd-1fe605c55e52" />
+Up - model without ridge
+Down - model with ridge
+
+We can see on the heatmap, that the model with ridge more hesitant, since it doesn't overfit too much.
+
+Weights on the "ridge model" converge much faster.
+
